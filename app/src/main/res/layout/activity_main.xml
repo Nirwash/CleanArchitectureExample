@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".presentation.MainActivity">
 
     <TextView
         android:id="@+id/tvShowUserName"
@@ -24,7 +24,7 @@
         app:layout_constraintTop_toBottomOf="@id/tvShowUserName"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"
-        android:text="get username"/>
+        android:text="@string/get_username"/>
 
     <EditText
         android:id="@+id/edEnterUserName"
@@ -34,7 +34,7 @@
         app:layout_constraintTop_toBottomOf="@id/btnGetUserName"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"
-        android:hint="write username hear"/>
+        android:hint="@string/enter_username"/>
 
     <Button
         android:id="@+id/btnSaveUserName"
@@ -44,6 +44,6 @@
         app:layout_constraintTop_toBottomOf="@id/edEnterUserName"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="8dp"
-        android:text="save username"/>
+        android:text="@string/save_username"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
