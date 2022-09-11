@@ -7,6 +7,8 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.nirwashh.android.cleanarchitectureexample.R
 import com.nirwashh.android.cleanarchitectureexample.data.repository.UserRepositoryImpl
+import com.nirwashh.android.cleanarchitectureexample.data.storage.UserStorage
+import com.nirwashh.android.cleanarchitectureexample.data.storage.sharedprefs.SharedPrefUserStorage
 import com.nirwashh.android.cleanarchitectureexample.databinding.ActivityMainBinding
 import com.nirwashh.android.cleanarchitectureexample.domain.models.SaveUserNameParam
 import com.nirwashh.android.cleanarchitectureexample.domain.usecase.GetUserNameUseCase
@@ -16,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     private val userRepository by lazy(LazyThreadSafetyMode.NONE) {
-        UserRepositoryImpl(context = applicationContext)
+        UserRepositoryImpl(userStorage = SharedPrefUserStorage(context = applicationContext))
     }
     private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
         GetUserNameUseCase(userRepository = userRepository)
