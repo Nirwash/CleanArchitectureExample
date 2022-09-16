@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">CleanArchitectureExample</string>
-    <string name="show_result">Save result: %1$b</string>
     <string name="enter_username">Enter Username</string>
     <string name="save_username">save username</string>
     <string name="get_username">get username</string>

@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nirwashh.android.cleanarchitectureexample.R
 import com.nirwashh.android.cleanarchitectureexample.data.repository.UserRepositoryImpl
@@ -19,37 +20,28 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var vm: MainViewModel
 
-    private val userRepository by lazy(LazyThreadSafetyMode.NONE) {
-        UserRepositoryImpl(userStorage = SharedPrefUserStorage(context = applicationContext))
-    }
-    private val getUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        GetUserNameUseCase(userRepository = userRepository)
-    }
-    private val saveUserNameUseCase by lazy(LazyThreadSafetyMode.NONE) {
-        SaveUserNameUseCase(userRepository = userRepository)
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm = ViewModelProvider(this)[MainViewModel::class.java]
+        vm = ViewModelProvider(this, MainViewModelFactory(this))[MainViewModel::class.java]
 
-        binding.btnSaveUserName.setOnClickListener {
-            val text = binding.edEnterUserName.text.toString()
-            val params = SaveUserNameParam(firstName = text)
-            val result = saveUserNameUseCase.execute(param = params)
-            binding.tvShowUserName.text = getString(R.string.show_result, result)
-            hideKeyboard(this, binding.edEnterUserName)
-
-        }
-        binding.btnGetUserName.setOnClickListener {
-            val text = getUserNameUseCase.execute().toString()
+        vm.result.observe(this) { text ->
             binding.tvShowUserName.text = text
         }
+
+        binding.btnSaveUserName.setOnClickListener {
+            val input = binding.edEnterUserName.text.toString()
+            vm.save(input)
+            hideKeyboard(this, binding.edEnterUserName)
+        }
+
+        binding.btnGetUserName.setOnClickListener {
+            vm.load()
+        }
     }
+
 
     private fun hideKeyboard(context: Context, view: View) {
         val imm =
