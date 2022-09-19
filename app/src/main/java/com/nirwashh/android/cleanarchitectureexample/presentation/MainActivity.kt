@@ -1,31 +1,22 @@
 package com.nirwashh.android.cleanarchitectureexample.presentation
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.lifecycle.Observer
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.nirwashh.android.cleanarchitectureexample.R
-import com.nirwashh.android.cleanarchitectureexample.data.repository.UserRepositoryImpl
-import com.nirwashh.android.cleanarchitectureexample.data.storage.UserStorage
-import com.nirwashh.android.cleanarchitectureexample.data.storage.sharedprefs.SharedPrefUserStorage
 import com.nirwashh.android.cleanarchitectureexample.databinding.ActivityMainBinding
-import com.nirwashh.android.cleanarchitectureexample.domain.models.SaveUserNameParam
-import com.nirwashh.android.cleanarchitectureexample.domain.usecase.GetUserNameUseCase
-import com.nirwashh.android.cleanarchitectureexample.domain.usecase.SaveUserNameUseCase
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var vm: MainViewModel
+    private val vm by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        vm = ViewModelProvider(this, MainViewModelFactory(this))[MainViewModel::class.java]
 
         vm.result.observe(this) { text ->
             binding.tvShowUserName.text = text
