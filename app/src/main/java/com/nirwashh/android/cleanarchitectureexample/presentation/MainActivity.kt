@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.nirwashh.android.cleanarchitectureexample.R
+import com.nirwashh.android.cleanarchitectureexample.app.App
 import com.nirwashh.android.cleanarchitectureexample.data.repository.UserRepositoryImpl
 import com.nirwashh.android.cleanarchitectureexample.data.storage.UserStorage
 import com.nirwashh.android.cleanarchitectureexample.data.storage.sharedprefs.SharedPrefUserStorage
@@ -15,17 +16,23 @@ import com.nirwashh.android.cleanarchitectureexample.databinding.ActivityMainBin
 import com.nirwashh.android.cleanarchitectureexample.domain.models.SaveUserNameParam
 import com.nirwashh.android.cleanarchitectureexample.domain.usecase.GetUserNameUseCase
 import com.nirwashh.android.cleanarchitectureexample.domain.usecase.SaveUserNameUseCase
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var vm: MainViewModel
+
+    @Inject
+    lateinit var vmFactory: MainViewModelFactory
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        vm = ViewModelProvider(this, MainViewModelFactory(this))[MainViewModel::class.java]
+        (applicationContext as App).appComponent.inject(mainActivity = this)
+
+        vm = ViewModelProvider(this, vmFactory)[MainViewModel::class.java]
 
         vm.result.observe(this) { text ->
             binding.tvShowUserName.text = text
